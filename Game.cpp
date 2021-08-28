@@ -18,6 +18,12 @@ Game::Game(RenderWindow* win) :
 
 	score = 0;
 
+	font.loadFromFile("CourierPrime.ttf");
+	textScore.setFont(font);
+	textScore.setFillColor(Color::Black);
+	textScore.setCharacterSize(30);
+	textScore.setString("Score: " + to_string(score));
+
 	coinTexture.loadFromFile("Coin.png");
 	playerTexture.loadFromFile("Player.png");
 	player.push_back(Player(Vector2f(100, 100), Vector2f(400, 400), 4 * 60, &playerTexture, Vector2u(4, 8), 0.2f));
@@ -73,7 +79,7 @@ void Game::update()
 			{
 				coins.erase(coins.begin() + i);
 				score += 10;
-				cout << score << endl;
+				textScore.setString("Score: " + to_string(score));
 			}
 		}
 	}
@@ -95,6 +101,8 @@ void Game::render()
 	{
 		player.at(i).drawOn(*window);
 	}
+
+	window->draw(textScore);
 }
 
 void Game::spawnObs()
