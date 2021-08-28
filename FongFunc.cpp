@@ -40,3 +40,14 @@ int randrange(int start, int stop)
 {
 	return (rand() % stop-start+1) + start;
 }
+
+bool chance(int p)
+{
+	if (p <= 0)
+		return false;
+	else if (p >= 100)
+		return true;
+
+	int result = rand() % 100;
+	return (result < p) ? true : false;
+}

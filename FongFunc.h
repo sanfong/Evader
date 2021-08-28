@@ -20,6 +20,10 @@ bool isCollided(RectangleShape a, RectangleShape b);
 
 int randrange(int start, int stop);
 
+// return true if success else false
+// p is in [0, 100]
+bool chance(int p);
+
 template<typename Num = float>
 inline Num clamp(Num value, Num min, Num max)
 {

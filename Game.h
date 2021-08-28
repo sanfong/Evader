@@ -4,6 +4,7 @@
 #include "Animation.h"
 #include "Player.h"
 #include "Obstacle.h"
+#include "Item.h"
 
 using namespace sf;
 using namespace std;
@@ -28,11 +29,13 @@ private:
 
 	vector<Player> player;
 	vector<Obstacle> obs;
+	vector<Item> coins;
 
 public:
 	Game(RenderWindow* win);
 	void update();
 	void render();
 	void spawnObs();
+	void spawnCoin();
 	void deadAnimation();
 };

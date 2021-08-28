@@ -3,6 +3,8 @@
 using namespace sf;
 using namespace std;
 
+const int SCREEN_SIZE = 800;
+
 Game::Game(RenderWindow* win) :
 	deadAnim(&Game::deadAnimation, this)
 {
@@ -81,24 +83,31 @@ void Game::spawnObs()
 	switch (randrange(1, 4))
 	{
 	case 1: // Top
-		spawnPos = Vector2f(randrange(0, 800 - size), -200);
+		spawnPos = Vector2f(randrange(0, SCREEN_SIZE - size), -200);
 		dir = Vector2f(0, 1);
 		break;
 	case 2: // Left
-		spawnPos = Vector2f(-200, randrange(0, 800 - size));
+		spawnPos = Vector2f(-200, randrange(0, SCREEN_SIZE - size));
 		dir = Vector2f(1, 0);
 		break;
 	case 3: // Right
-		spawnPos = Vector2f(1000, randrange(0, 800 - size));
+		spawnPos = Vector2f(1000, randrange(0, SCREEN_SIZE - size));
 		dir = Vector2f(-1, 0);
 		break;
 	case 4: // Down
-		spawnPos = Vector2f(randrange(0, 800 - size), 1000);
+		spawnPos = Vector2f(randrange(0, SCREEN_SIZE - size), 1000);
 		dir = Vector2f(0, -1);
 		break;
 	}
 
 	obs.push_back(Obstacle(Vector2f(size, size), spawnPos, obsSpeed, dir, 10));
+}
+
+void Game::spawnCoin()
+{
+	float size = 50;
+	Vector2f spawnPos = Vector2f(randrange(0, SCREEN_SIZE - size), randrange(0, SCREEN_SIZE - size));
+
 }
 
 void Game::deadAnimation()

@@ -4,7 +4,6 @@
 class Item
 {
 protected:
-	Texture itemTexture;
 	RectangleShape shape;
 
 public:
