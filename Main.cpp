@@ -30,7 +30,7 @@ int main()
         // Update scene
         sceneManager.at(currentScene)->update();
 
-        window.clear(Color(180, 180, 180));
+        window.clear(Color(210, 210, 210));
         // Draw scene
         sceneManager.at(currentScene)->render();
         window.display();

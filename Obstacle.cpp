@@ -4,7 +4,7 @@ Obstacle::Obstacle(Vector2f rectSize, Vector2f pos, float spd, Vector2f dir, flo
 {
 	shape.setSize(rectSize);
 	shape.setPosition(pos);
-	shape.setFillColor(Color(randrange(0, 255), randrange(0, 255), randrange(0, 255)));
+	shape.setFillColor(Color(randrange(0, 200), randrange(0, 200), randrange(0, 200)));
 	speed = spd;
 	lifetime = lt;
 	direction = dir;

@@ -20,7 +20,7 @@ Game::Game(RenderWindow* win) :
 
 	coinTexture.loadFromFile("Coin.png");
 	playerTexture.loadFromFile("Player.png");
-	player.push_back(Player(Vector2f(100, 100), Vector2f(300, 300), 4 * 60, &playerTexture, Vector2u(4, 8), 0.2f));
+	player.push_back(Player(Vector2f(100, 100), Vector2f(400, 400), 4 * 60, &playerTexture, Vector2u(4, 8), 0.2f));
 
 	player[0].setWindowPtr(window);
 }
@@ -41,6 +41,7 @@ void Game::update()
 	for (size_t p = 0; p < player.size() && !gameOver; p++)
 	{
 		player.at(p).update(deltaTime);
+		// Obstacle
 		for (size_t i = 0; i < obs.size(); i++)
 		{
 			Obstacle& ob = obs.at(i);
@@ -50,7 +51,6 @@ void Game::update()
 				obs.erase(obs.begin() + i);
 				continue;
 			}
-
 			if (ob.getGlobalBounds().intersects(player.at(p).getGlobalBounds()))
 			{
 				gameOver = true;
@@ -59,8 +59,16 @@ void Game::update()
 			}
 		}
 
+		// Coins
 		for (size_t i = 0; i < coins.size(); i++)
 		{
+			Item& coin = coins.at(i);
+			coin.update(deltaTime);
+			if (coin.died)
+			{
+				coins.erase(coins.begin() + i);
+				continue;
+			}
 			if (coins.at(i).getGlobalBounds().intersects(player.at(p).getGlobalBounds()))
 			{
 				coins.erase(coins.begin() + i);
@@ -123,7 +131,7 @@ void Game::spawnCoin()
 {
 	float size = 50;
 	Vector2f spawnPos = Vector2f(randrange(0, SCREEN_SIZE - size), randrange(0, SCREEN_SIZE - size));
-	coins.push_back(Item(Vector2f(size, size), spawnPos, &coinTexture));
+	coins.push_back(Item(Vector2f(size, size), spawnPos, &coinTexture, 30));
 }
 
 void Game::deadAnimation()
