@@ -35,6 +35,7 @@ void Game::update()
 		currentRate = 0;
 		spawnRate = clamp(spawnRate - 0.02f, fastestSpawnRate, spawnRate);
 		spawnObs();
+		spawnCoin();
 	}
 
 	for (size_t i = 0; i < player.size() && !gameOver; i++)
@@ -57,11 +58,25 @@ void Game::update()
 				deadAnim.launch();
 			}
 		}
+
+		for (size_t j = 0; j < coins.size(); j++)
+		{
+			if (coins.at(j).getGlobalBounds().intersects(player.at(i).getGlobalBounds()))
+			{
+				coins.erase(coins.begin() + j);
+				score += 10;
+			}
+		}
 	}
 }
 
 void Game::render()
 {
+	for (size_t i = 0; i < coins.size(); i++)
+	{
+		coins.at(i).drawOn(*window);
+	}
+
 	for (size_t i = 0; i < obs.size(); i++)
 	{
 		obs.at(i).drawOn(*window);
@@ -107,7 +122,7 @@ void Game::spawnCoin()
 {
 	float size = 50;
 	Vector2f spawnPos = Vector2f(randrange(0, SCREEN_SIZE - size), randrange(0, SCREEN_SIZE - size));
-
+	coins.push_back(Item(Vector2f(size, size), spawnPos, &coinTexture));
 }
 
 void Game::deadAnimation()
