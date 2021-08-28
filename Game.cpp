@@ -38,12 +38,12 @@ void Game::update()
 		spawnCoin();
 	}
 
-	for (size_t i = 0; i < player.size() && !gameOver; i++)
+	for (size_t p = 0; p < player.size() && !gameOver; p++)
 	{
-		player.at(i).update(deltaTime);
-		for (size_t j = 0; j < obs.size(); j++)
+		player.at(p).update(deltaTime);
+		for (size_t i = 0; i < obs.size(); i++)
 		{
-			Obstacle& ob = obs.at(j);
+			Obstacle& ob = obs.at(i);
 			ob.update(deltaTime);
 			if (ob.died)
 			{
@@ -51,7 +51,7 @@ void Game::update()
 				continue;
 			}
 
-			if (ob.getGlobalBounds().intersects(player.at(i).getGlobalBounds()))
+			if (ob.getGlobalBounds().intersects(player.at(p).getGlobalBounds()))
 			{
 				gameOver = true;
 				deadDirection = ob.getDirection();
@@ -59,12 +59,13 @@ void Game::update()
 			}
 		}
 
-		for (size_t j = 0; j < coins.size(); j++)
+		for (size_t i = 0; i < coins.size(); i++)
 		{
-			if (coins.at(j).getGlobalBounds().intersects(player.at(i).getGlobalBounds()))
+			if (coins.at(i).getGlobalBounds().intersects(player.at(p).getGlobalBounds()))
 			{
-				coins.erase(coins.begin() + j);
+				coins.erase(coins.begin() + i);
 				score += 10;
+				cout << score << endl;
 			}
 		}
 	}
