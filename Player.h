@@ -27,7 +27,8 @@ public:
 	inline void setPosition(Vector2f pos) { shape.setPosition(pos); }
 	inline void move(Vector2f offset) { shape.move(offset); }
 	inline void rotate(float angle) { shape.rotate(angle); }
-
+	
+	inline void setBoost(float sec) { spdUpDuration = sec; }
 	void setWindowPtr(RenderWindow* window);
 	void update(float deltaTime);
 	void drawOn(RenderWindow& window);

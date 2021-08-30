@@ -15,6 +15,7 @@ Game::Game(RenderWindow* win) :
 	gameOver = false;
 	fastestSpawnRate = 0.5f;
 	obsSpeed = 200;
+	lightingSpawnRate = 10;
 
 	score = 0;
 
@@ -24,6 +25,7 @@ Game::Game(RenderWindow* win) :
 	textScore.setCharacterSize(30);
 	textScore.setString("Score: " + to_string(score));
 
+	donutTexture.loadFromFile("Donut.png");
 	coinTexture.loadFromFile("Coin.png");
 	playerTexture.loadFromFile("Player.png");
 	player.push_back(Player(Vector2f(100, 100), Vector2f(400, 400), 4 * 60, &playerTexture, Vector2u(4, 8), 0.2f));
@@ -39,9 +41,15 @@ void Game::update()
 	if (currentRate >= spawnRate && !gameOver)
 	{
 		currentRate = 0;
-		spawnRate = clamp(spawnRate - 0.02f, fastestSpawnRate, spawnRate);
+		spawnRate = clamp(spawnRate - 0.01f, fastestSpawnRate, spawnRate);
 		spawnObs();
 		spawnCoin();
+	}
+	if (lightingClock.getElapsedTime().asSeconds() > lightingSpawnRate)
+	{
+		lightingClock.restart();
+		lightingSpawnRate = randrange(30, 60);
+		spawnDonut();
 	}
 
 	for (size_t p = 0; p < player.size() && !gameOver; p++)
@@ -75,11 +83,28 @@ void Game::update()
 				coins.erase(coins.begin() + i);
 				continue;
 			}
-			if (coins.at(i).getGlobalBounds().intersects(player.at(p).getGlobalBounds()))
+			if (coin.getGlobalBounds().intersects(player.at(p).getGlobalBounds()))
 			{
 				coins.erase(coins.begin() + i);
 				score += 10;
 				textScore.setString("Score: " + to_string(score));
+			}
+		}
+
+		// Donuts
+		for (size_t i = 0; i < donuts.size(); i++)
+		{
+			Item& donut = donuts.at(i);
+			donut.update(deltaTime);
+			if (donut.died)
+			{
+				donuts.erase(donuts.begin() + i);
+				continue;
+			}
+			if (donut.getGlobalBounds().intersects(player.at(p).getGlobalBounds()))
+			{
+				donuts.erase(donuts.begin() + i);
+				player.at(p).setBoost(10);
 			}
 		}
 	}
@@ -87,6 +112,11 @@ void Game::update()
 
 void Game::render()
 {
+	for (size_t i = 0; i < donuts.size(); i++)
+	{
+		donuts.at(i).drawOn(*window);
+	}
+
 	for (size_t i = 0; i < coins.size(); i++)
 	{
 		coins.at(i).drawOn(*window);
@@ -103,6 +133,13 @@ void Game::render()
 	}
 
 	window->draw(textScore);
+}
+
+void Game::spawnDonut()
+{
+	float size = 50;
+	Vector2f spawnPos = Vector2f(randrange(0, SCREEN_SIZE - size), randrange(0, SCREEN_SIZE - size));
+	donuts.push_back(Item(Vector2f(size, size), spawnPos, &donutTexture, 15));
 }
 
 void Game::spawnObs()

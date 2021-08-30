@@ -14,7 +14,7 @@ Player::Player(Vector2f shapeSize, Vector2f startPos, float speed, Texture* text
 	row = 0;
 
 	spdUpDuration = 0;
-	speedUp = speed * 2.f;
+	speedUp = speed * 1.5f;
 
 	shape.setSize(shapeSize);
 	shape.setPosition(startPos);
