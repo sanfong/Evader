@@ -5,9 +5,12 @@ class Item
 {
 protected:
 	RectangleShape shape;
+	float lifetime;
 
 public:
-	Item(Vector2f shapeSize, Vector2f startPos, Texture* item);
+	bool died;
+
+	Item(Vector2f shapeSize, Vector2f startPos, Texture* item, float lf);
 
 	inline virtual FloatRect getGlobalBounds() { return shape.getGlobalBounds(); }
 	inline virtual Vector2f getPosition() { return shape.getPosition(); }

@@ -18,9 +18,15 @@ Game::Game(RenderWindow* win) :
 
 	score = 0;
 
+	font.loadFromFile("CourierPrime.ttf");
+	textScore.setFont(font);
+	textScore.setFillColor(Color::Black);
+	textScore.setCharacterSize(30);
+	textScore.setString("Score: " + to_string(score));
+
 	coinTexture.loadFromFile("Coin.png");
 	playerTexture.loadFromFile("Player.png");
-	player.push_back(Player(Vector2f(100, 100), Vector2f(300, 300), 4 * 60, &playerTexture, Vector2u(4, 8), 0.2f));
+	player.push_back(Player(Vector2f(100, 100), Vector2f(400, 400), 4 * 60, &playerTexture, Vector2u(4, 8), 0.2f));
 
 	player[0].setWindowPtr(window);
 }
@@ -38,20 +44,20 @@ void Game::update()
 		spawnCoin();
 	}
 
-	for (size_t i = 0; i < player.size() && !gameOver; i++)
+	for (size_t p = 0; p < player.size() && !gameOver; p++)
 	{
-		player.at(i).update(deltaTime);
-		for (size_t j = 0; j < obs.size(); j++)
+		player.at(p).update(deltaTime);
+		// Obstacle
+		for (size_t i = 0; i < obs.size(); i++)
 		{
-			Obstacle& ob = obs.at(j);
+			Obstacle& ob = obs.at(i);
 			ob.update(deltaTime);
 			if (ob.died)
 			{
 				obs.erase(obs.begin() + i);
 				continue;
 			}
-
-			if (ob.getGlobalBounds().intersects(player.at(i).getGlobalBounds()))
+			if (ob.getGlobalBounds().intersects(player.at(p).getGlobalBounds()))
 			{
 				gameOver = true;
 				deadDirection = ob.getDirection();
@@ -59,11 +65,21 @@ void Game::update()
 			}
 		}
 
+		// Coins
 		for (size_t i = 0; i < coins.size(); i++)
 		{
-			if (coins.at(i).getGlobalBounds().intersects(player.at(i).getGlobalBounds()))
+			Item& coin = coins.at(i);
+			coin.update(deltaTime);
+			if (coin.died)
 			{
 				coins.erase(coins.begin() + i);
+				continue;
+			}
+			if (coins.at(i).getGlobalBounds().intersects(player.at(p).getGlobalBounds()))
+			{
+				coins.erase(coins.begin() + i);
+				score += 10;
+				textScore.setString("Score: " + to_string(score));
 			}
 		}
 	}
@@ -85,6 +101,8 @@ void Game::render()
 	{
 		player.at(i).drawOn(*window);
 	}
+
+	window->draw(textScore);
 }
 
 void Game::spawnObs()
@@ -121,7 +139,7 @@ void Game::spawnCoin()
 {
 	float size = 50;
 	Vector2f spawnPos = Vector2f(randrange(0, SCREEN_SIZE - size), randrange(0, SCREEN_SIZE - size));
-	coins.push_back(Item(Vector2f(size, size), spawnPos, &coinTexture));
+	coins.push_back(Item(Vector2f(size, size), spawnPos, &coinTexture, 30));
 }
 
 void Game::deadAnimation()

@@ -24,8 +24,10 @@ private:
 	Texture coinTexture;
 	Vector2f deadDirection;
 	Thread deadAnim;
+	Font font;
+	Text textScore;
 
-	float score;
+	int score;
 
 	vector<Player> player;
 	vector<Obstacle> obs;
