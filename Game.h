@@ -19,16 +19,21 @@ private:
 	float fastestSpawnRate;
 	float obsSpeed;
 	bool gameOver;
+	bool shieldOn;
 	Vector2f mousePos;
 	Texture playerTexture;
 	Texture coinTexture;
 	Texture donutTexture;
+	Texture shieldTexture;
+	Texture barrierTexture;
 	Vector2f deadDirection;
 	Thread deadAnim;
 	Font font;
 	Text textScore;
 	float lightingSpawnRate;
 	Clock lightingClock;
+	float shieldSpawnRate;
+	Clock shieldClock;
 
 	int score;
 
@@ -36,11 +41,13 @@ private:
 	vector<Obstacle> obs;
 	vector<Item> coins;
 	vector<Item> donuts;
+	vector<Item> shields;
 
 public:
 	Game(RenderWindow* win);
 	void update();
 	void render();
+	void spawnShield();
 	void spawnDonut();
 	void spawnObs();
 	void spawnCoin();

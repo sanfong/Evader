@@ -13,9 +13,11 @@ Game::Game(RenderWindow* win) :
 	spawnRate = 2;
 	currentRate = 0;
 	gameOver = false;
+	shieldOn = false;
 	fastestSpawnRate = 0.5f;
 	obsSpeed = 200;
-	lightingSpawnRate = 10;
+	lightingSpawnRate = 60;
+	shieldSpawnRate = 90;
 
 	score = 0;
 
@@ -25,11 +27,13 @@ Game::Game(RenderWindow* win) :
 	textScore.setCharacterSize(30);
 	textScore.setString("Score: " + to_string(score));
 
+	shieldTexture.loadFromFile("Shield.png");
+	barrierTexture.loadFromFile("Barrier-Sheet.png");
 	donutTexture.loadFromFile("Donut.png");
 	coinTexture.loadFromFile("Coin.png");
+
 	playerTexture.loadFromFile("Player.png");
 	player.push_back(Player(Vector2f(100, 100), Vector2f(400, 400), 4 * 60, &playerTexture, Vector2u(4, 8), 0.2f));
-
 	player[0].setWindowPtr(window);
 }
 
@@ -38,18 +42,28 @@ void Game::update()
 	deltaTime = clock.restart().asSeconds();
 	mousePos = (Vector2f)Mouse::getPosition(*window);
 	currentRate += deltaTime;
-	if (currentRate >= spawnRate && !gameOver)
+	// Item spawn
+	if (!gameOver)
 	{
-		currentRate = 0;
-		spawnRate = clamp(spawnRate - 0.01f, fastestSpawnRate, spawnRate);
-		spawnObs();
-		spawnCoin();
-	}
-	if (lightingClock.getElapsedTime().asSeconds() > lightingSpawnRate)
-	{
-		lightingClock.restart();
-		lightingSpawnRate = randrange(30, 60);
-		spawnDonut();
+		if (currentRate >= spawnRate)
+		{
+			currentRate = 0;
+			spawnRate = clamp(spawnRate - 0.01f, fastestSpawnRate, spawnRate);
+			spawnObs();
+			spawnCoin();
+		}
+		if (lightingClock.getElapsedTime().asSeconds() > lightingSpawnRate)
+		{
+			lightingClock.restart();
+			lightingSpawnRate = randrange(45, 60);
+			spawnDonut();
+		}
+		if (shieldClock.getElapsedTime().asSeconds() > shieldSpawnRate)
+		{
+			shieldClock.restart();
+			shieldSpawnRate = randrange(45, 60);
+			spawnShield();
+		}
 	}
 
 	for (size_t p = 0; p < player.size() && !gameOver; p++)
@@ -67,9 +81,17 @@ void Game::update()
 			}
 			if (ob.getGlobalBounds().intersects(player.at(p).getGlobalBounds()))
 			{
-				gameOver = true;
-				deadDirection = ob.getDirection();
-				deadAnim.launch();
+				if (shieldOn)
+				{
+					shieldOn = false;
+					obs.erase(obs.begin() + i);
+				}
+				else
+				{
+					gameOver = true;
+					deadDirection = ob.getDirection();
+					deadAnim.launch();
+				}
 			}
 		}
 
@@ -107,6 +129,24 @@ void Game::update()
 				player.at(p).setBoost(10);
 			}
 		}
+
+		// Shield
+		for (size_t i = 0; i < shields.size(); i++)
+		{
+			Item& shield = shields.at(i);
+			shield.update(deltaTime);
+			if (shield.died)
+			{
+				shields.erase(shields.begin() + i);
+				continue;
+			}
+			if (shield.getGlobalBounds().intersects(player.at(p).getGlobalBounds()))
+			{
+				shields.erase(shields.begin() + i);
+				shieldOn = true;
+				// Animation
+			}
+		}
 	}
 }
 
@@ -115,6 +155,11 @@ void Game::render()
 	for (size_t i = 0; i < donuts.size(); i++)
 	{
 		donuts.at(i).drawOn(*window);
+	}
+
+	for (size_t i = 0; i < shields.size(); i++)
+	{
+		shields.at(i).drawOn(*window);
 	}
 
 	for (size_t i = 0; i < coins.size(); i++)
@@ -133,6 +178,13 @@ void Game::render()
 	}
 
 	window->draw(textScore);
+}
+
+void Game::spawnShield()
+{
+	float size = 50;
+	Vector2f spawnPos = Vector2f(randrange(0, SCREEN_SIZE - size), randrange(0, SCREEN_SIZE - size));
+	shields.push_back(Item(Vector2f(size, size), spawnPos, &shieldTexture, 15));
 }
 
 void Game::spawnDonut()

@@ -10,7 +10,7 @@ int main()
     RenderWindow window(VideoMode(800, 800), "Game", Style::Close);
     window.setFramerateLimit(60);
 
-    srand(time(NULL));
+    srand(time(0));
     unsigned int currentScene = 0;
     
     Game game(&window);
