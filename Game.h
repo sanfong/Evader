@@ -15,6 +15,7 @@ private:
 	Clock clock;
 	int score;
 	float deltaTime;
+	float* multiplier;
 	float spawnRate;
 	float currentRate;
 	float fastestSpawnRate;
@@ -43,7 +44,7 @@ private:
 	vector<Item> shields;
 
 public:
-	Game(RenderWindow* win);
+	Game(RenderWindow* win, float* mul);
 	void update();
 	void render();
 	void spawnShield();

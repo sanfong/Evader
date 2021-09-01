@@ -5,17 +5,18 @@ using namespace std;
 
 const int SCREEN_SIZE = 800;
 
-Game::Game(RenderWindow* win) :
+Game::Game(RenderWindow* win, float* mul) :
 	deadAnim(&Game::deadAnimation, this)
 {
 	window = win;
 	score = 0;
 	deltaTime = 0;
+	multiplier = mul;
 	spawnRate = 2;
 	currentRate = 0;
 	gameOver = false;
 	shieldOn = false;
-	fastestSpawnRate = 0.5f;
+	fastestSpawnRate = 0.6f;
 	obsSpeed = 200;
 	lightingSpawnRate = 60;
 	shieldSpawnRate = 90;
@@ -41,7 +42,7 @@ Game::Game(RenderWindow* win) :
 
 void Game::update()
 {
-	deltaTime = clock.restart().asSeconds();
+	deltaTime = clock.restart().asSeconds() * *multiplier;
 	mousePos = (Vector2f)Mouse::getPosition(*window);
 	currentRate += deltaTime;
 	// Item spawn
