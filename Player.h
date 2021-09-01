@@ -19,6 +19,8 @@ private:
 	float spdUpDuration;
 
 public:
+	RectangleShape effectShape;
+
 	Player(Vector2f shapeSize, Vector2f startPos, float speed, Texture* texture, Vector2u imageCount, float switchTime, RenderWindow* win = nullptr);
 
 	Animation& thisAnimation();

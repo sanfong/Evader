@@ -17,9 +17,13 @@ Player::Player(Vector2f shapeSize, Vector2f startPos, float speed, Texture* text
 	speedUp = speed * 1.5f;
 
 	shape.setSize(shapeSize);
+	shape.setOrigin(shapeSize / 2.f);
 	shape.setPosition(startPos);
 	shape.setTexture(texture);
-	shape.setOrigin(shapeSize / 2.f);
+
+	effectShape.setSize(shapeSize * 2.f);
+	effectShape.setOrigin(shapeSize);
+	effectShape.setPosition(startPos);
 }
 
 Animation& Player::thisAnimation()
@@ -92,6 +96,7 @@ void Player::update(float deltaTime)
 		velocity = normalize(velocity) * speed * deltaTime;
 	}
 	shape.move(velocity);
+	effectShape.setPosition(shape.getPosition());
 
 	boundary(shape);
 	

@@ -13,6 +13,7 @@ class Game : public Scene
 {
 private:
 	Clock clock;
+	int score;
 	float deltaTime;
 	float spawnRate;
 	float currentRate;
@@ -34,8 +35,6 @@ private:
 	Clock lightingClock;
 	float shieldSpawnRate;
 	Clock shieldClock;
-
-	int score;
 
 	vector<Player> player;
 	vector<Obstacle> obs;

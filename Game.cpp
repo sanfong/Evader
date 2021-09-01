@@ -9,6 +9,7 @@ Game::Game(RenderWindow* win) :
 	deadAnim(&Game::deadAnimation, this)
 {
 	window = win;
+	score = 0;
 	deltaTime = 0;
 	spawnRate = 2;
 	currentRate = 0;
@@ -19,8 +20,6 @@ Game::Game(RenderWindow* win) :
 	lightingSpawnRate = 60;
 	shieldSpawnRate = 90;
 
-	score = 0;
-
 	font.loadFromFile("CourierPrime.ttf");
 	textScore.setFont(font);
 	textScore.setFillColor(Color::Black);
@@ -28,13 +27,16 @@ Game::Game(RenderWindow* win) :
 	textScore.setString("Score: " + to_string(score));
 
 	shieldTexture.loadFromFile("Shield.png");
-	barrierTexture.loadFromFile("Barrier-Sheet.png");
 	donutTexture.loadFromFile("Donut.png");
 	coinTexture.loadFromFile("Coin.png");
 
 	playerTexture.loadFromFile("Player.png");
 	player.push_back(Player(Vector2f(100, 100), Vector2f(400, 400), 4 * 60, &playerTexture, Vector2u(4, 8), 0.2f));
 	player[0].setWindowPtr(window);
+
+	barrierTexture.loadFromFile("Barrier-Sheet.png");
+	player[0].effectShape.setTexture(&barrierTexture);
+	player[0].effectShape.setTextureRect(IntRect(0, 0, 64, 64));
 }
 
 void Game::update()
@@ -144,7 +146,6 @@ void Game::update()
 			{
 				shields.erase(shields.begin() + i);
 				shieldOn = true;
-				// Animation
 			}
 		}
 	}
@@ -175,6 +176,10 @@ void Game::render()
 	for (size_t i = 0; i < player.size(); i++)
 	{
 		player.at(i).drawOn(*window);
+		if (shieldOn)
+		{
+			window->draw(player.at(i).effectShape);
+		}
 	}
 
 	window->draw(textScore);
