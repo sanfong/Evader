@@ -38,7 +38,7 @@ bool isCollided(RectangleShape a, RectangleShape b)
 
 int randrange(int start, int stop)
 {
-	return (rand() % stop-start+1) + start;
+	return (rand() % (stop-start+1)) + start;
 }
 
 bool chance(int p)
