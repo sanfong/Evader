@@ -13,9 +13,9 @@ int main()
 	window.setFramerateLimit(60);
 
 	srand(time(0));
-	unsigned int currentScene = 0;
+	int currentScene = 0;
 	
-	Game game(&window, &multiplier);
+	Game game(&window, &multiplier, &currentScene);
 
 	vector<Scene*> sceneManager;
 	sceneManager.push_back(&game); // 0

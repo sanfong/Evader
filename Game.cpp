@@ -5,21 +5,22 @@ using namespace std;
 
 const int SCREEN_SIZE = 800;
 
-Game::Game(RenderWindow* win, float* mul) :
+Game::Game(RenderWindow* win, float* mul, int* scene) :
 	deadAnim(&Game::deadAnimation, this)
 {
 	window = win;
 	score = 0;
 	deltaTime = 0;
 	multiplier = mul;
+	currentScene = scene;
 	spawnRate = 2;
 	currentRate = 0;
 	gameOver = false;
 	shieldOn = false;
-	fastestSpawnRate = 0.6f;
+	fastestSpawnRate = 0.5f;
 	obsSpeed = 200;
 	lightingSpawnRate = 60;
-	shieldSpawnRate = 90;
+	shieldSpawnRate = 120;
 
 	font.loadFromFile("CourierPrime.ttf");
 	textScore.setFont(font);
@@ -52,6 +53,7 @@ void Game::update()
 		{
 			currentRate = 0;
 			spawnRate = clamp(spawnRate - 0.01f, fastestSpawnRate, spawnRate);
+			cout << spawnRate << endl;
 			spawnObs();
 			spawnCoin();
 		}
@@ -124,6 +126,7 @@ void Game::update()
 			if (donut.died)
 			{
 				donuts.erase(donuts.begin() + i);
+				lightingSpawnRate = randrange(50, 60);
 				continue;
 			}
 			if (donut.getGlobalBounds().intersects(player.at(p).getGlobalBounds()))
@@ -141,6 +144,7 @@ void Game::update()
 			if (shield.died)
 			{
 				shields.erase(shields.begin() + i);
+				shieldSpawnRate = randrange(50, 60);
 				continue;
 			}
 			if (shield.getGlobalBounds().intersects(player.at(p).getGlobalBounds()))
@@ -184,6 +188,27 @@ void Game::render()
 	}
 
 	window->draw(textScore);
+}
+
+void Game::reset()
+{
+	score = 0;
+	spawnRate = 2;
+	currentRate = 0;
+	gameOver = false;
+	shieldOn = false;
+	fastestSpawnRate = 0.6f;
+	lightingSpawnRate = 60;
+	shieldSpawnRate = 90;
+
+	textScore.setPosition(Vector2f(0, 0));
+	textScore.setString("Score: " + to_string(score));
+	textScore.setCharacterSize(30);
+
+	player.push_back(Player(Vector2f(100, 100), Vector2f(400, 400), 4 * 60, &playerTexture, Vector2u(4, 8), 0.2f));
+
+	player[0].effectShape.setTexture(&barrierTexture);
+	player[0].effectShape.setTextureRect(IntRect(0, 0, 64, 64));
 }
 
 void Game::spawnShield()
@@ -253,4 +278,5 @@ void Game::deadAnimation()
 		}
 	}
 	player.clear();
+	Vector2f textBoxSize = Vector2f(textScore.getGlobalBounds().width, textScore.getGlobalBounds().height);
 }

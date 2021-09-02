@@ -14,6 +14,7 @@ class Game : public Scene
 private:
 	Clock clock;
 	int score;
+	int* currentScene;
 	float deltaTime;
 	float* multiplier;
 	float spawnRate;
@@ -44,9 +45,10 @@ private:
 	vector<Item> shields;
 
 public:
-	Game(RenderWindow* win, float* mul);
+	Game(RenderWindow* win, float* mul, int* scene);
 	void update();
 	void render();
+	void reset();
 	void spawnShield();
 	void spawnDonut();
 	void spawnObs();
