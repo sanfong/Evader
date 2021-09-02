@@ -30,6 +30,8 @@ private:
 	int offset = 0;
 
 public:
+	bool isActive;
+
 	Button();
 	/// <summary>Constructor of Button class</summary>
 	/// <param name="position">: Position of the button (top-left)</param>

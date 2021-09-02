@@ -8,12 +8,14 @@ const int OFFRATIO = 3;
 Button::Button()
 {
 	this->font = nullptr;
+	isActive = false;
 }
 
 Button::Button(Vector2f position, Vector2f size, Font* font, string text, Color idle, Color hover, Color active)
 {
 	shape.setPosition(position);
 	shape.setSize(size);
+	shape.setFillColor(idle);
 
 	this->font = font;
 	this->text.setFont(*this->font);
@@ -28,8 +30,7 @@ Button::Button(Vector2f position, Vector2f size, Font* font, string text, Color 
 	this->idle = idle;
 	this->hover = hover;
 	this->active = active;
-
-	shape.setFillColor(this->idle);
+	isActive = false;
 }
 
 void Button::setup(Vector2f position, Vector2f size, Font* font, string text, Color idle, Color hover, Color active)
@@ -85,8 +86,11 @@ void Button::update(Vector2f mousePos)
 
 void Button::render(RenderWindow& window)
 {
-	window.draw(shape);
-	window.draw(text);
+	if (isActive)
+	{
+		window.draw(shape);
+		window.draw(text);
+	}
 }
 
 bool Button::isPressed()

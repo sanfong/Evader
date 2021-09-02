@@ -14,7 +14,7 @@ int main()
 
 	srand(time(0));
 	int currentScene = 0;
-	
+
 	Game game(&window, &multiplier, &currentScene);
 
 	vector<Scene*> sceneManager;

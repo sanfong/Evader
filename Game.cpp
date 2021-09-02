@@ -28,6 +28,9 @@ Game::Game(RenderWindow* win, float* mul, int* scene) :
 	textScore.setCharacterSize(30);
 	textScore.setString("Score: " + to_string(score));
 
+	returnToMenu.setup(Vector2f(300, 400), Vector2f(200, 60), &font, "Menu", Color(0, 0, 0, 50), Color(0, 0, 0, 80), Color(0, 0, 0, 120));
+	returnToMenu.setFontSize(30);
+
 	shieldTexture.loadFromFile("Shield.png");
 	donutTexture.loadFromFile("Donut.png");
 	coinTexture.loadFromFile("Coin.png");
@@ -53,7 +56,6 @@ void Game::update()
 		{
 			currentRate = 0;
 			spawnRate = clamp(spawnRate - 0.01f, fastestSpawnRate, spawnRate);
-			cout << spawnRate << endl;
 			spawnObs();
 			spawnCoin();
 		}
@@ -188,6 +190,7 @@ void Game::render()
 	}
 
 	window->draw(textScore);
+	returnToMenu.render(*window);
 }
 
 void Game::reset()

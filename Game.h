@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Obstacle.h"
 #include "Item.h"
+#include "Button.h"
 
 using namespace sf;
 using namespace std;
@@ -37,6 +38,8 @@ private:
 	Clock lightingClock;
 	float shieldSpawnRate;
 	Clock shieldClock;
+
+	Button returnToMenu;
 
 	vector<Player> player;
 	vector<Obstacle> obs;
