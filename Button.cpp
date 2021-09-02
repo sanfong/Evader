@@ -4,7 +4,35 @@ using namespace sf;
 using namespace std;
 
 const int OFFRATIO = 3;
+
+Button::Button()
+{
+	this->font = nullptr;
+}
+
 Button::Button(Vector2f position, Vector2f size, Font* font, string text, Color idle, Color hover, Color active)
+{
+	shape.setPosition(position);
+	shape.setSize(size);
+
+	this->font = font;
+	this->text.setFont(*this->font);
+	this->text.setString(text);
+	this->text.setFillColor(Color::White);
+	this->text.setCharacterSize(24);
+
+	offset = this->text.getCharacterSize() / OFFRATIO;
+	Vector2f textBoxSize = Vector2f(this->text.getGlobalBounds().width, this->text.getGlobalBounds().height);
+	this->text.setPosition((shape.getSize() / 2.f) - (textBoxSize / 2.f) + (shape.getPosition()) + Vector2f(0, -offset));
+
+	this->idle = idle;
+	this->hover = hover;
+	this->active = active;
+
+	shape.setFillColor(this->idle);
+}
+
+void Button::setup(Vector2f position, Vector2f size, Font* font, string text, Color idle, Color hover, Color active)
 {
 	shape.setPosition(position);
 	shape.setSize(size);

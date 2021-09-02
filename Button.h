@@ -30,7 +30,7 @@ private:
 	int offset = 0;
 
 public:
-	
+	Button();
 	/// <summary>Constructor of Button class</summary>
 	/// <param name="position">: Position of the button (top-left)</param>
 	/// <param name="size">: Size of the button</param>
@@ -40,6 +40,8 @@ public:
 	/// <param name="hover">: Color when mouse is above the button</param>
 	/// <param name="active">: Color when mouse clicked the button</param>
 	Button(Vector2f position, Vector2f size, Font* font, string text, Color idle, Color hover, Color active);
+
+	void setup(Vector2f position, Vector2f size, Font* font, string text, Color idle, Color hover, Color active);
 
 	/// <summary>Normal update</summary>
 	/// <param name="position">: Position of the button (top-left)</param>
