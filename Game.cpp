@@ -49,6 +49,8 @@ void Game::update()
 	deltaTime = clock.restart().asSeconds() * *multiplier;
 	mousePos = (Vector2f)Mouse::getPosition(*window);
 	currentRate += deltaTime;
+	returnToMenu.update(mousePos);
+
 	// Item spawn
 	if (!gameOver)
 	{
@@ -95,6 +97,7 @@ void Game::update()
 				}
 				else
 				{
+					// Game Over
 					gameOver = true;
 					deadDirection = ob.getDirection();
 					deadAnim.launch();
@@ -281,5 +284,9 @@ void Game::deadAnimation()
 		}
 	}
 	player.clear();
+
+	returnToMenu.isActive = true;
+	textScore.setCharacterSize(40);
 	Vector2f textBoxSize = Vector2f(textScore.getGlobalBounds().width, textScore.getGlobalBounds().height);
+	textScore.setPosition(Vector2f(400, 320) - (textBoxSize / 2.f));
 }

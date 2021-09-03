@@ -57,6 +57,8 @@ void Button::setup(Vector2f position, Vector2f size, Font* font, string text, Co
 
 void Button::update(Vector2f mousePos)
 {
+	if (!isActive)
+		return;
 	state = buttonState::IDLE;
 	if (shape.getGlobalBounds().contains(mousePos))
 	{

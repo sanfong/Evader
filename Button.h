@@ -87,6 +87,8 @@ public:
 	template <typename... Args>
 	void update(Vector2f mousePos, void* funcAddress = nullptr, Args... args)
 	{
+		if (!isActive)
+			return;
 		static bool once = true;
 		state = buttonState::IDLE;
 		if (shape.getGlobalBounds().contains(mousePos))
@@ -129,6 +131,8 @@ public:
 	template <typename TOwner, void(TOwner::* func)()>
 	void update(Vector2f mousePos, TOwner* f)
 	{
+		if (!isActive)
+			return;
 		static bool once = true;
 		state = buttonState::IDLE;
 		if (shape.getGlobalBounds().contains(mousePos))
@@ -169,6 +173,8 @@ public:
 	template <typename TOwner, typename Arg, void(TOwner::* func)(Arg)>
 	void update(Vector2f mousePos, TOwner* f, Arg arg)
 	{
+		if (!isActive)
+			return;
 		static bool once = true;
 		state = buttonState::IDLE;
 		if (shape.getGlobalBounds().contains(mousePos))
@@ -209,6 +215,8 @@ public:
 	template <typename TOwner, typename Arg1, typename Arg2, void(TOwner::* func)(Arg1, Arg2)>
 	void update(Vector2f mousePos, TOwner* f, Arg1 arg1, Arg2 arg2)
 	{
+		if (!isActive)
+			return;
 		static bool once = true;
 		state = buttonState::IDLE;
 		if (shape.getGlobalBounds().contains(mousePos))
