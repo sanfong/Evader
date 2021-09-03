@@ -20,6 +20,7 @@ Player::Player(Vector2f shapeSize, Vector2f startPos, float speed, Texture* text
 	shape.setOrigin(shapeSize / 2.f);
 	shape.setPosition(startPos);
 	shape.setTexture(texture);
+	shape.setTextureRect(animation.uvRect);
 
 	effectShape.setSize(shapeSize * 2.f);
 	effectShape.setOrigin(shapeSize);

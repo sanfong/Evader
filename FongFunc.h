@@ -24,6 +24,11 @@ int randrange(int start, int stop);
 // p is in [0, 100]
 bool chance(int p);
 
+inline void changeScene(int* scene, int i)
+{
+	*scene = i;
+}
+
 template<typename Num = float>
 inline Num clamp(Num value, Num min, Num max)
 {

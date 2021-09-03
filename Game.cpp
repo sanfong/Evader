@@ -49,7 +49,7 @@ void Game::update()
 	deltaTime = clock.restart().asSeconds() * *multiplier;
 	mousePos = (Vector2f)Mouse::getPosition(*window);
 	currentRate += deltaTime;
-	returnToMenu.update(mousePos);
+	returnToMenu.update<int*, int>(mousePos, changeScene, currentScene, 0);
 	
 	// Item spawn
 	if (!gameOver)
@@ -101,7 +101,7 @@ void Game::update()
 					gameOver = true;
 					deadDirection = ob.getDirection();
 					deadAnim.launch();
-					
+					// TODO: Save score
 				}
 			}
 		}
@@ -213,18 +213,31 @@ void Game::reset()
 	currentRate = 0;
 	gameOver = false;
 	shieldOn = false;
-	fastestSpawnRate = 0.6f;
+	showEndScore = false;
+	fastestSpawnRate = 0.5f;
 	lightingSpawnRate = 60;
-	shieldSpawnRate = 90;
+	shieldSpawnRate = 120;
 
 	textScore.setPosition(Vector2f(0, 0));
 	textScore.setString("Score: " + to_string(score));
 	textScore.setCharacterSize(30);
 
+	returnToMenu.isActive = false;
+
+	player.clear();
+	obs.clear();
+	coins.clear();
+	donuts.clear();
+	shields.clear();
+
 	player.push_back(Player(Vector2f(100, 100), Vector2f(400, 400), 4 * 60, &playerTexture, Vector2u(4, 8), 0.2f));
 
 	player[0].effectShape.setTexture(&barrierTexture);
 	player[0].effectShape.setTextureRect(IntRect(0, 0, 64, 64));
+
+	clock.restart();
+	lightingClock.restart();
+	shieldClock.restart();
 }
 
 void Game::spawnShield()

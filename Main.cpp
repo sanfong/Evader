@@ -13,11 +13,11 @@ int main()
 	RenderWindow window(VideoMode(800, 800), "Game", Style::Close);
 	window.setFramerateLimit(60);
 
-	srand(time(0));
+	srand(time_t(static_cast<unsigned>(0)));
 	int currentScene = 0;
 
-	Menu menu(&window, &multiplier, &currentScene);
 	Game game(&window, &multiplier, &currentScene);
+	Menu menu(&window, &multiplier, &currentScene, &game);
 
 	vector<Scene*> sceneManager;
 	sceneManager.push_back(&menu); // 0

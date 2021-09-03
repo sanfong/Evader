@@ -2,11 +2,12 @@
 #define SCREEN_SIZE 800
 #define SCREEN_HALF 400
 
-Menu::Menu(RenderWindow* win, float* mul, int* scene)
+Menu::Menu(RenderWindow* win, float* mul, int* scene, Game* g = nullptr)
 {
 	window = win;
 	multiplier = mul;
 	currentScene = scene;
+	game = g;
 
 	font.loadFromFile("CourierPrime.ttf");
 
@@ -25,10 +26,16 @@ Menu::Menu(RenderWindow* win, float* mul, int* scene)
 	backToMenu.isActive = true;
 }
 
+void startGame(int* scene, int i, Game* game)
+{
+	game->reset();
+	changeScene(scene, i);
+}
+
 void Menu::update()
 {
 	mousePos = (Vector2f)Mouse::getPosition(*window);
-	start.update(mousePos);
+	start.update<int*, int, Game*>(mousePos, startGame, currentScene, 1, game);
 	scoreBoard.update(mousePos);
 	quit.update<RenderWindow>(mousePos, window, &RenderWindow::close);
 	backToMenu.update(mousePos);

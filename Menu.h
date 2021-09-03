@@ -2,6 +2,7 @@
 #include "FongFunc.h"
 #include "Scene.h"
 #include "Button.h"
+#include "Game.h"
 
 class Menu : public Scene
 {
@@ -10,6 +11,7 @@ private:
 	float* multiplier;
 	Vector2f mousePos;
 	Font font;
+	Game* game;
 
 	Text gameName;
 	Button start;
@@ -17,9 +19,8 @@ private:
 	Button quit;
 
 	Button backToMenu;
-
 public:
-	Menu(RenderWindow* win, float* mul, int* scene);
+	Menu(RenderWindow* win, float* mul, int* scene, Game* g);
 
 	void update();
 	void render();
