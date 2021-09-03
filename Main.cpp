@@ -1,6 +1,7 @@
 #include "FongFunc.h"
 #include "Scene.h"
 #include "Game.h"
+#include "Menu.h"
 
 using namespace sf;
 using namespace std;
@@ -15,10 +16,12 @@ int main()
 	srand(time(0));
 	int currentScene = 0;
 
+	Menu menu(&window, &multiplier, &currentScene);
 	Game game(&window, &multiplier, &currentScene);
 
 	vector<Scene*> sceneManager;
-	sceneManager.push_back(&game); // 0
+	sceneManager.push_back(&menu); // 0
+	sceneManager.push_back(&game); // 1
 
 	while (window.isOpen())
 	{
