@@ -1,9 +1,8 @@
 #include "Game.h"
+#define SCREEN_SIZE 800
 
 using namespace sf;
 using namespace std;
-
-const int SCREEN_SIZE = 800;
 
 Game::Game(RenderWindow* win, float* mul, int* scene) :
 	deadAnim(&Game::deadAnimation, this)
