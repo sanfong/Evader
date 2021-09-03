@@ -1,5 +1,4 @@
 #include "Game.h"
-#define SCREEN_SIZE 800
 
 using namespace sf;
 using namespace std;
