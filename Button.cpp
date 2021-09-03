@@ -9,6 +9,7 @@ Button::Button()
 {
 	this->font = nullptr;
 	isActive = false;
+	clickOutside = false;
 }
 
 Button::Button(Vector2f position, Vector2f size, Font* font, string text, Color idle, Color hover, Color active)
@@ -17,6 +18,7 @@ Button::Button(Vector2f position, Vector2f size, Font* font, string text, Color 
 	shape.setSize(size);
 	shape.setFillColor(idle);
 
+	clickOutside = false;
 	this->font = font;
 	this->text.setFont(*this->font);
 	this->text.setString(text);
@@ -55,37 +57,6 @@ void Button::setup(Vector2f position, Vector2f size, Font* font, string text, Co
 	shape.setFillColor(this->idle);
 }
 
-void Button::update(Vector2f mousePos)
-{
-	if (!isActive)
-		return;
-	state = buttonState::IDLE;
-	if (shape.getGlobalBounds().contains(mousePos))
-	{
-		state = buttonState::HOVER;
-		if (Mouse::isButtonPressed(Mouse::Left))
-		{
-			state = buttonState::ACTIVE;
-		}
-	}
-
-	switch (state)
-	{
-	case buttonState::IDLE:
-		shape.setFillColor(idle);
-		break;
-	case buttonState::HOVER:
-		shape.setFillColor(hover);
-		break;
-	case buttonState::ACTIVE:
-		shape.setFillColor(active);
-		break;
-	default:
-		cout << "State Error" << endl;
-		break;
-	}
-}
-
 void Button::render(RenderWindow& window)
 {
 	if (isActive)
@@ -97,11 +68,7 @@ void Button::render(RenderWindow& window)
 
 bool Button::isPressed()
 {
-	if (state == buttonState::ACTIVE)
-	{
-		return true;
-	}
-	return false;
+	return (state == buttonState::ACTIVE) ? true : false;
 }
 
 buttonState Button::getButtonState()

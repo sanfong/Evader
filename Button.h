@@ -29,6 +29,8 @@ private:
 	buttonState state = buttonState::IDLE;
 	int offset = 0;
 
+	bool clickOutside;
+
 public:
 	bool isActive;
 
@@ -44,10 +46,6 @@ public:
 	Button(Vector2f position, Vector2f size, Font* font, string text, Color idle, Color hover, Color active);
 
 	void setup(Vector2f position, Vector2f size, Font* font, string text, Color idle, Color hover, Color active);
-
-	/// <summary>Normal update</summary>
-	/// <param name="position">: Position of the button (top-left)</param>
-	void update(Vector2f mousePos);
 
 	// draw the button on the window
 	void render(RenderWindow& window);
@@ -78,7 +76,6 @@ public:
 
 	/*
 	update with an ability to callback
-	Recommended if you want to use the callback ability
 	How to use:
 	* update<parameter type of callback function...>(mousePos, funcAddress, parameter of callback function...);
 	* update<string, int>(mousePos, PrintNameAge, "User", 18);
@@ -89,12 +86,24 @@ public:
 	{
 		if (!isActive)
 			return;
+
+		bool leftClick = Mouse::isButtonPressed(Mouse::Left);
+
+		if (leftClick && !shape.getGlobalBounds().contains(mousePos))
+		{
+			clickOutside = true;
+		}
+		else if (!leftClick)
+		{
+			clickOutside = false;
+		}
+
 		static bool once = true;
 		state = buttonState::IDLE;
 		if (shape.getGlobalBounds().contains(mousePos))
 		{
 			state = buttonState::HOVER;
-			if (Mouse::isButtonPressed(Mouse::Left))
+			if (leftClick && !clickOutside)
 			{
 				state = buttonState::ACTIVE;
 			}
@@ -128,17 +137,29 @@ public:
 	
 	// for callback member function with no argument
 	// <Class, Member-func>(mousePos, Obj-pointer)
-	template <typename TOwner, void(TOwner::* func)()>
-	void update(Vector2f mousePos, TOwner* f)
+	template <typename TOwner, typename... Arg>
+	void update(Vector2f mousePos, TOwner* f, void(TOwner::* func)(Arg...))
 	{
 		if (!isActive)
 			return;
+
+		bool leftClick = Mouse::isButtonPressed(Mouse::Left);
+
+		if (leftClick && !shape.getGlobalBounds().contains(mousePos))
+		{
+			clickOutside = true;
+		}
+		else if (!leftClick)
+		{
+			clickOutside = false;
+		}
+
 		static bool once = true;
 		state = buttonState::IDLE;
 		if (shape.getGlobalBounds().contains(mousePos))
 		{
 			state = buttonState::HOVER;
-			if (Mouse::isButtonPressed(Mouse::Left))
+			if (leftClick && !clickOutside)
 			{
 				state = buttonState::ACTIVE;
 			}
@@ -160,90 +181,6 @@ public:
 			{
 				once = false;
 				(f->*func)();
-			}
-			break;
-		default:
-			cout << "State Error" << endl;
-			break;
-		}
-	}
-
-	// for callback member function with one argument
-	// <Class, Argument-type, Member-func>(mousePos, Obj-pointer, arg)
-	template <typename TOwner, typename Arg, void(TOwner::* func)(Arg)>
-	void update(Vector2f mousePos, TOwner* f, Arg arg)
-	{
-		if (!isActive)
-			return;
-		static bool once = true;
-		state = buttonState::IDLE;
-		if (shape.getGlobalBounds().contains(mousePos))
-		{
-			state = buttonState::HOVER;
-			if (Mouse::isButtonPressed(Mouse::Left))
-			{
-				state = buttonState::ACTIVE;
-			}
-		}
-
-		switch (state)
-		{
-		case buttonState::IDLE:
-			shape.setFillColor(idle);
-			once = true;
-			break;
-		case buttonState::HOVER:
-			shape.setFillColor(hover);
-			once = true;
-			break;
-		case buttonState::ACTIVE:
-			shape.setFillColor(active);
-			if (f != nullptr && once)
-			{
-				once = false;
-				(f->*func)(arg);
-			}
-			break;
-		default:
-			cout << "State Error" << endl;
-			break;
-		}
-	}
-
-	// for callback member function with two arguments
-	// <Class, Argument-type1, Argument-type2, Member-func>(mousePos, Obj-pointer, arg1, arg2)
-	template <typename TOwner, typename Arg1, typename Arg2, void(TOwner::* func)(Arg1, Arg2)>
-	void update(Vector2f mousePos, TOwner* f, Arg1 arg1, Arg2 arg2)
-	{
-		if (!isActive)
-			return;
-		static bool once = true;
-		state = buttonState::IDLE;
-		if (shape.getGlobalBounds().contains(mousePos))
-		{
-			state = buttonState::HOVER;
-			if (Mouse::isButtonPressed(Mouse::Left))
-			{
-				state = buttonState::ACTIVE;
-			}
-		}
-
-		switch (state)
-		{
-		case buttonState::IDLE:
-			shape.setFillColor(idle);
-			once = true;
-			break;
-		case buttonState::HOVER:
-			shape.setFillColor(hover);
-			once = true;
-			break;
-		case buttonState::ACTIVE:
-			shape.setFillColor(active);
-			if (f != nullptr && once)
-			{
-				once = false;
-				(f->*func)(arg1, arg2);
 			}
 			break;
 		default:
