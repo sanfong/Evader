@@ -24,6 +24,7 @@ private:
 	float obsSpeed;
 	bool gameOver;
 	bool shieldOn;
+	bool showEndScore;
 	Vector2f mousePos;
 	Texture playerTexture;
 	Texture coinTexture;

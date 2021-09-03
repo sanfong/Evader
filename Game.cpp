@@ -17,6 +17,7 @@ Game::Game(RenderWindow* win, float* mul, int* scene) :
 	currentRate = 0;
 	gameOver = false;
 	shieldOn = false;
+	showEndScore = false;
 	fastestSpawnRate = 0.5f;
 	obsSpeed = 200;
 	lightingSpawnRate = 60;
@@ -50,7 +51,7 @@ void Game::update()
 	mousePos = (Vector2f)Mouse::getPosition(*window);
 	currentRate += deltaTime;
 	returnToMenu.update(mousePos);
-
+	
 	// Item spawn
 	if (!gameOver)
 	{
@@ -101,6 +102,7 @@ void Game::update()
 					gameOver = true;
 					deadDirection = ob.getDirection();
 					deadAnim.launch();
+					
 				}
 			}
 		}
@@ -158,6 +160,15 @@ void Game::update()
 				shieldOn = true;
 			}
 		}
+	}
+
+	if (!showEndScore && player.size() < 1)
+	{
+		showEndScore = true;
+		returnToMenu.isActive = true;
+		textScore.setCharacterSize(40);
+		Vector2f textBoxSize = Vector2f(textScore.getGlobalBounds().width, textScore.getGlobalBounds().height);
+		textScore.setPosition(Vector2f(400, 320) - (textBoxSize / 2.f));
 	}
 }
 
@@ -284,9 +295,4 @@ void Game::deadAnimation()
 		}
 	}
 	player.clear();
-
-	returnToMenu.isActive = true;
-	textScore.setCharacterSize(40);
-	Vector2f textBoxSize = Vector2f(textScore.getGlobalBounds().width, textScore.getGlobalBounds().height);
-	textScore.setPosition(Vector2f(400, 320) - (textBoxSize / 2.f));
 }
