@@ -1,6 +1,4 @@
 #include "Menu.h"
-#define SCREEN_SIZE 800
-#define SCREEN_HALF 400
 
 Menu::Menu(RenderWindow* win, float* mul, int* scene, Game* g = nullptr)
 {
