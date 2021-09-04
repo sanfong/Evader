@@ -7,6 +7,8 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
+#include "LeaderBoard.h"
+
 #define SCREEN_SIZE 800
 #define SCREEN_HALF 400
 
