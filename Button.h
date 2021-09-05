@@ -137,8 +137,8 @@ public:
 	
 	// for callback member function with no argument
 	// <Class, Member-func>(mousePos, Obj-pointer)
-	template <typename TOwner, typename... Arg>
-	void update(Vector2f mousePos, TOwner* f, void(TOwner::* func)(Arg...))
+	template <typename TOwner, typename... Args>
+	void update(Vector2f mousePos, TOwner* f, void(TOwner::* func)(Args...), Args... args)
 	{
 		if (!isActive)
 			return;
@@ -180,7 +180,7 @@ public:
 			if (f != nullptr && once)
 			{
 				once = false;
-				(f->*func)();
+				(f->*func)(args...);
 			}
 			break;
 		default:
