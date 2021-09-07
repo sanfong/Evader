@@ -75,9 +75,12 @@ public:
 
 	Textbox(Vector2f pos, Vector2f size, Color color, Font* font);
 	void setup(Vector2f pos, Vector2f size, Color color, Font* font);
-	void setFontSize(int size);
 
+	void setFontSize(int size);
 	void setAlign(Align align);
+	inline void setXOffset(int off) { xOffset = off; }
+	inline void setCharLimit(int limit) { charLimit = limit; }
+
 	inline string getString() { return input.str(); }
 
 	template <typename... Args>

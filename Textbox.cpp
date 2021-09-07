@@ -7,7 +7,7 @@ Textbox::Textbox()
 	font = nullptr;
 	align = Align::CENTER;
 	charLimit = 0;
-	offset = 0;
+	offset = this->text.getCharacterSize() / OFFRATIO;
 	xOffset = 0;
 	isActive = false;
 	isSelected = false;
@@ -69,6 +69,7 @@ void Textbox::render(RenderWindow& window)
 void Textbox::setFontSize(int size)
 {
 	text.setCharacterSize(size);
+	offset = this->text.getCharacterSize() / OFFRATIO;
 }
 
 void Textbox::setAlign(Align align)

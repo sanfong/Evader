@@ -33,6 +33,8 @@ Menu::Menu(RenderWindow* win, Game* g = nullptr)
 	gameName.setPosition(Vector2f(440, 150) - (textBoxSize / 2.f));
 	gameName.setFillColor(Color(randrange(0, 128), randrange(0, 128), randrange(0, 128)));
 	gameName.setLetterSpacing(0.2f);
+
+
 }
 
 void startGame(int i, Game* game)

@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Button.h"
 #include "Game.h"
+#include "Textbox.h"
 
 class Menu : public Scene
 {
@@ -21,6 +22,7 @@ private:
 	Button quit;
 
 	Button backToMenu;
+	Textbox typingName;
 
 public:
 	Menu(RenderWindow* win, Game* g);
