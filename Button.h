@@ -27,7 +27,7 @@ private:
 	Color active;
 
 	buttonState state = buttonState::IDLE;
-	int offset = 0;
+	int offset;
 
 	bool clickOutside;
 
@@ -88,7 +88,6 @@ public:
 			return;
 
 		bool leftClick = Mouse::isButtonPressed(Mouse::Left);
-
 		if (leftClick && !shape.getGlobalBounds().contains(mousePos))
 		{
 			clickOutside = true;
@@ -177,7 +176,7 @@ public:
 			break;
 		case buttonState::ACTIVE:
 			shape.setFillColor(active);
-			if (f != nullptr && once)
+			if (once)
 			{
 				once = false;
 				(f->*func)(args...);

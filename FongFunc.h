@@ -2,6 +2,8 @@
 #include <iostream>
 #include <time.h>
 #include <vector>
+#include <string>
+#include <sstream>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
@@ -13,6 +15,10 @@
 #define SCREEN_HALF 400
 
 using namespace sf;
+
+extern float multiplier;
+extern int currentScene;
+extern vector<Event> events;
 
 Vector2f normalize(Vector2f vec);
 
@@ -28,9 +34,9 @@ int randrange(int start, int stop);
 // p is in [0, 100]
 bool chance(int p);
 
-inline void changeScene(int* scene, int i)
+inline void changeScene(int i)
 {
-	*scene = i;
+	currentScene = i;
 }
 
 template<typename Num = float>

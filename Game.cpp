@@ -3,14 +3,12 @@
 using namespace sf;
 using namespace std;
 
-Game::Game(RenderWindow* win, float* mul, int* scene) :
+Game::Game(RenderWindow* win) :
 	deadAnim(&Game::deadAnimation, this)
 {
 	window = win;
 	score = 0;
 	deltaTime = 0;
-	multiplier = mul;
-	currentScene = scene;
 	spawnRate = 2;
 	currentRate = 0;
 	gameOver = false;
@@ -45,10 +43,10 @@ Game::Game(RenderWindow* win, float* mul, int* scene) :
 
 void Game::update()
 {
-	deltaTime = clock.restart().asSeconds() * *multiplier;
+	deltaTime = clock.restart().asSeconds() * multiplier;
 	mousePos = (Vector2f)Mouse::getPosition(*window);
 	currentRate += deltaTime;
-	returnToMenu.update<int*, int>(mousePos, changeScene, currentScene, 0);
+	returnToMenu.update(mousePos, changeScene, 0);
 	
 	// Item spawn
 	if (!gameOver)

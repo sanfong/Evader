@@ -3,13 +3,14 @@
 using namespace sf;
 using namespace std;
 
-const int OFFRATIO = 3;
+constexpr int OFFRATIO = 3;
 
 Button::Button()
 {
 	this->font = nullptr;
 	isActive = false;
 	clickOutside = false;
+	offset = 0;
 }
 
 Button::Button(Vector2f position, Vector2f size, Font* font, string text, Color idle, Color hover, Color active)

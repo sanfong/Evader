@@ -1,10 +1,8 @@
 #include "Menu.h"
 
-Menu::Menu(RenderWindow* win, float* mul, int* scene, Game* g = nullptr)
+Menu::Menu(RenderWindow* win, Game* g = nullptr)
 {
 	window = win;
-	multiplier = mul;
-	currentScene = scene;
 	game = g;
 
 	showScoreBG = false;
@@ -37,16 +35,16 @@ Menu::Menu(RenderWindow* win, float* mul, int* scene, Game* g = nullptr)
 	gameName.setLetterSpacing(0.2f);
 }
 
-void startGame(int* scene, int i, Game* game)
+void startGame(int i, Game* game)
 {
 	game->reset();
-	changeScene(scene, i);
+	changeScene(i);
 }
 
 void Menu::update()
 {
 	mousePos = (Vector2f)Mouse::getPosition(*window);
-	start.update<int*, int, Game*>(mousePos, startGame, currentScene, 1, game);
+	start.update<int, Game*>(mousePos, startGame, 1, game);
 	scoreBoard.update(mousePos, this, &Menu::toggleScoreBoard);
 	quit.update<RenderWindow>(mousePos, window, &RenderWindow::close);
 

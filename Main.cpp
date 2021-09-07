@@ -7,27 +7,28 @@ using namespace sf;
 using namespace std;
 
 float multiplier = 1;
+int currentScene = 0;
+vector<Event> events = {};
 
 int main()
 {
 	RenderWindow window(VideoMode(800, 800), "Game", Style::Close);
 	window.setFramerateLimit(60);
-
-	srand(time(0));
-	int currentScene = 0;
-
-	Game game(&window, &multiplier, &currentScene);
-	Menu menu(&window, &multiplier, &currentScene, &game);
-
+	
+	Game game(&window);
+	Menu menu(&window, &game);
+	
 	vector<Scene*> sceneManager;
 	sceneManager.push_back(&menu); // 0
 	sceneManager.push_back(&game); // 1
 
 	while (window.isOpen())
 	{
+		events.clear();
 		Event ev;
 		while (window.pollEvent(ev))
 		{
+			events.push_back(ev);
 			switch (ev.type)
 			{
 			case Event::Closed:
@@ -43,7 +44,6 @@ int main()
 				break;
 			}
 		}
-
 		// Update scene
 		sceneManager.at(currentScene)->update();
 
