@@ -39,9 +39,9 @@ private:
 	Clock lightingClock;
 	float shieldSpawnRate;
 	Clock shieldClock;
-
-	Button returnToMenu;
-	
+	RectangleShape whiteAlpha;
+	Text enterYourName;
+	Textbox typingName;
 
 	vector<Player> player;
 	vector<Obstacle> obs;

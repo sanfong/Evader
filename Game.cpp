@@ -25,12 +25,10 @@ Game::Game(RenderWindow* win) :
 	textScore.setCharacterSize(30);
 	textScore.setString("Score: " + to_string(score));
 
-	returnToMenu.setup(Vector2f(150, 400), Vector2f(500, 80), &font, "Menu", Color(0, 0, 0, 50), Color(0, 0, 0, 80), Color(0, 0, 0, 120));
-	returnToMenu.setFontSize(30);
-
 	shieldTexture.loadFromFile("Resources/Shield.png");
 	donutTexture.loadFromFile("Resources/Donut.png");
 	coinTexture.loadFromFile("Resources/Coin.png");
+	typingNameTexture.loadFromFile("Resources/EnterName.png");
 
 	playerTexture.loadFromFile("Resources/Player.png");
 	player.push_back(Player(Vector2f(100, 100), Vector2f(400, 400), 4 * 60, &playerTexture, Vector2u(4, 8), 0.2f));
@@ -39,6 +37,28 @@ Game::Game(RenderWindow* win) :
 	barrierTexture.loadFromFile("Resources/Barrier-Sheet.png");
 	player[0].effectShape.setTexture(&barrierTexture);
 	player[0].effectShape.setTextureRect(IntRect(0, 0, 64, 64));
+
+	whiteAlpha.setPosition(Vector2f(100, 300));
+	whiteAlpha.setSize(Vector2f(600, 250));
+	whiteAlpha.setFillColor(Color(255, 255, 255, 100));
+
+	enterYourName.setFont(font);
+	enterYourName.setFillColor(Color::Black);
+	enterYourName.setString("Enter your name");
+	enterYourName.setPosition(Vector2f(270, 380));
+
+	typingName.setup(Vector2f(150, 420), Vector2f(500, 80), &font, Color());
+	typingName.getShape().setTexture(&typingNameTexture);
+	typingName.hasLimit = true;
+	typingName.select();
+	typingName.setCharLimit(22);
+}
+
+void saveGoMenu(string str, int score, int scene)
+{
+	cout << str << " " << score << endl;
+	SB::addLeaderBoard(str, score);
+	currentScene = scene;
 }
 
 void Game::update()
@@ -46,7 +66,8 @@ void Game::update()
 	deltaTime = clock.restart().asSeconds() * multiplier;
 	mousePos = (Vector2f)Mouse::getPosition(*window);
 	currentRate += deltaTime;
-	returnToMenu.update(mousePos, changeScene, 0);
+	
+	typingName.update(mousePos, saveGoMenu, typingName.getString(), score, 0);
 	
 	// Item spawn
 	if (!gameOver)
@@ -161,10 +182,10 @@ void Game::update()
 	if (!showEndScore && player.size() < 1)
 	{
 		showEndScore = true;
-		returnToMenu.isActive = true;
+		typingName.isActive = true;
 		textScore.setCharacterSize(40);
 		Vector2f textBoxSize = Vector2f(textScore.getGlobalBounds().width, textScore.getGlobalBounds().height);
-		textScore.setPosition(Vector2f(400, 320) - (textBoxSize / 2.f));
+		textScore.setPosition(Vector2f(400, 330) - (textBoxSize / 2.f));
 	}
 }
 
@@ -199,8 +220,14 @@ void Game::render()
 		}
 	}
 
+	if (showEndScore)
+	{
+		window->draw(whiteAlpha);
+		window->draw(enterYourName);
+	}
 	window->draw(textScore);
-	returnToMenu.render(*window);
+	typingName.render(*window);
+
 }
 
 void Game::reset()
@@ -219,7 +246,8 @@ void Game::reset()
 	textScore.setString("Score: " + to_string(score));
 	textScore.setCharacterSize(30);
 
-	returnToMenu.isActive = false;
+	typingName.isActive = false;
+	typingName.select();
 
 	player.clear();
 	obs.clear();

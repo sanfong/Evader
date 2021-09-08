@@ -14,13 +14,13 @@ int main()
 {
 	RenderWindow window(VideoMode(800, 800), "Game", Style::Close);
 	window.setFramerateLimit(60);
-	
+	srand(time(static_cast<time_t*>(0)));
 	Game game(&window);
 	Menu menu(&window, &game);
 	
 	vector<Scene*> sceneManager;
-	sceneManager.push_back(&game); // 1
 	sceneManager.push_back(&menu); // 0
+	sceneManager.push_back(&game); // 1
 
 	while (window.isOpen())
 	{

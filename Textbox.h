@@ -37,11 +37,6 @@ private:
 		}
 		return false;
 	}
-	inline void deselect()
-	{
-		isSelected = false;
-		text.setString(input + " ");
-	}
 	inline bool inputLogic(int ch)
 	{
 		if (ch == DELETE_KEY)
@@ -73,8 +68,8 @@ public:
 
 	Textbox();
 
-	Textbox(Vector2f pos, Vector2f size, Color color, Font* font);
-	void setup(Vector2f pos, Vector2f size, Color color, Font* font);
+	Textbox(Vector2f pos, Vector2f size, Font* font, Color textColor = Color(255, 255, 255), Color boxColor = Color(255, 255, 255));
+	void setup(Vector2f pos, Vector2f size, Font* font, Color textColor = Color(255, 255, 255), Color boxColor = Color(255, 255, 255));
 
 	void setFontSize(int size);
 	void setAlign(Align align);
@@ -84,9 +79,23 @@ public:
 	inline string getString() { return input; }
 	inline RectangleShape& getShape() { return shape; }
 
+	inline void deselect()
+	{
+		isSelected = false;
+		text.setString(input + " ");
+	}
+	inline void select()
+	{
+		isSelected = true;
+		text.setString(input + "_");
+	}
+
 	template <typename... Args>
 	void update(Vector2f mousePos, void* funcAddress = nullptr, Args... args)
 	{
+		if (!isActive)
+			return;
+
 		bool leftClick = Mouse::isButtonPressed(Mouse::Left);
 		if (leftClick && !shape.getGlobalBounds().contains(mousePos))
 			clickOutside = true;
@@ -141,6 +150,9 @@ public:
 	template <typename TOwner, typename... Args>
 	void update(Vector2f mousePos, TOwner* f, void(TOwner::* func)(Args...), Args... args)
 	{
+		if (!isActive)
+			return;
+
 		bool leftClick = Mouse::isButtonPressed(Mouse::Left);
 		if (leftClick && !shape.getGlobalBounds().contains(mousePos))
 			clickOutside = true;
