@@ -22,7 +22,6 @@ private:
 	Button quit;
 
 	Button backToMenu;
-	Textbox typingName;
 
 public:
 	Menu(RenderWindow* win, Game* g);

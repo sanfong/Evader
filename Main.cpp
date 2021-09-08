@@ -8,7 +8,7 @@ using namespace std;
 
 float multiplier = 1;
 int currentScene = 0;
-vector<Event> events = {};
+vector<Event> textEvents = {};
 
 int main()
 {
@@ -19,16 +19,15 @@ int main()
 	Menu menu(&window, &game);
 	
 	vector<Scene*> sceneManager;
-	sceneManager.push_back(&menu); // 0
 	sceneManager.push_back(&game); // 1
+	sceneManager.push_back(&menu); // 0
 
 	while (window.isOpen())
 	{
-		events.clear();
+		textEvents.clear();
 		Event ev;
 		while (window.pollEvent(ev))
 		{
-			events.push_back(ev);
 			switch (ev.type)
 			{
 			case Event::Closed:
@@ -39,6 +38,9 @@ int main()
 				break;
 			case Event::GainedFocus:
 				multiplier = 1;
+				break;
+			case Event::TextEntered:
+				textEvents.push_back(ev);
 				break;
 			default:
 				break;

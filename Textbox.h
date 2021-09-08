@@ -4,6 +4,7 @@
 #define DELETE_KEY 8
 #define ENTER_KEY 13
 #define ESC_KEY 27
+constexpr int OFFRATIO = 3;
 
 enum class Align
 {
@@ -19,8 +20,9 @@ private:
 	bool clickOutside;
 	int offset;
 	int xOffset;
+
 	Font* font;
-	stringstream input;
+	string input;
 	Align align;
 	size_t charLimit;
 
@@ -38,31 +40,29 @@ private:
 	inline void deselect()
 	{
 		isSelected = false;
-		text.setString(input.str());
+		text.setString(input + " ");
 	}
 	inline bool inputLogic(int ch)
 	{
 		if (ch == DELETE_KEY)
 		{
-			if (input.str().length() > 0)
-			{
-				string currentStr = input.str();
-				input.str(currentStr.substr(0, currentStr.length() - 1));
-			}
+			input = input.substr(0, input.length() - 1);
 		}
 		else if (ch == ENTER_KEY)
 		{
+			deselect();
 			return true;
 		}
 		else if (ch == ESC_KEY)
 		{
 			deselect();
+			return false;
 		}
 		else
 		{
-			input << static_cast<char>(ch);
+			input += static_cast<char>(ch);
 		}
-		text.setString(input.str() + "_");
+		text.setString(input + "_");
 		return false;
 	}
 
@@ -81,7 +81,8 @@ public:
 	inline void setXOffset(int off) { xOffset = off; }
 	inline void setCharLimit(int limit) { charLimit = limit; }
 
-	inline string getString() { return input.str(); }
+	inline string getString() { return input; }
+	inline RectangleShape& getShape() { return shape; }
 
 	template <typename... Args>
 	void update(Vector2f mousePos, void* funcAddress = nullptr, Args... args)
@@ -92,21 +93,24 @@ public:
 		else if (!leftClick)
 			clickOutside = false;
 
-		if (shape.getGlobalBounds().contains(mousePos) && !clickOutside)
+		if (shape.getGlobalBounds().contains(mousePos) && !clickOutside && leftClick)
 		{
 			isSelected = true;
+			text.setString(input + "_");
 		}
 		else if (clickOutside)
 		{
 			deselect();
 		}
 
-		for (size_t i = 0; i < events.size() && isSelected; i++)
+		for (size_t i = 0; i < textEvents.size() && isSelected; i++)
 		{
-			Event& ev = events.at(i);
+			Event& ev = textEvents.at(i);
+			// cout << textEvents.size() << endl;
 			if (checkEventTextEntered(ev))
 			{
-				if ((hasLimit && input.str().length() <= charLimit) || !hasLimit)
+				// cout << ev.text.unicode << endl;
+				if ((hasLimit && input.length() < charLimit) || !hasLimit || ev.text.unicode == DELETE_KEY)
 				{
 					if (inputLogic(ev.text.unicode))
 					{
@@ -123,15 +127,13 @@ public:
 
 		if (align == Align::CENTER)
 		{
-			offset = this->text.getCharacterSize() / OFFRATIO;
-			Vector2f textBoxSize = Vector2f(this->text.getGlobalBounds().width, this->text.getGlobalBounds().height);
-			this->text.setPosition((shape.getSize() / 2.f) - (textBoxSize / 2.f) + (shape.getPosition()) + Vector2f(0, -offset));
+			Vector2f textBoxSize = Vector2f(text.getGlobalBounds().width, text.getGlobalBounds().height);
+			text.setPosition((shape.getSize() / 2.f) - (textBoxSize / 2.f) + shape.getPosition() + Vector2f(offset, -offset));
 		}
 		else if (align == Align::LEFT)
 		{
-			offset = this->text.getCharacterSize() / OFFRATIO;
 			Vector2f textBoxSize = Vector2f(this->text.getGlobalBounds().width, this->text.getGlobalBounds().height);
-			float y_pos = shape.getPosition().y + (shape.getSize().y / 2.f) - offset;
+			float y_pos = shape.getPosition().y + (shape.getSize().y / 2.f) - (textBoxSize.y / 2.f) - offset;
 			this->text.setPosition(Vector2f(shape.getPosition().x + xOffset, y_pos));
 		}
 	}
@@ -145,21 +147,24 @@ public:
 		else if (!leftClick)
 			clickOutside = false;
 
-		if (shape.getGlobalBounds().contains(mousePos) && !clickOutside)
+		if (shape.getGlobalBounds().contains(mousePos) && !clickOutside && leftClick)
 		{
 			isSelected = true;
+			text.setString(input + "_");
 		}
 		else if (clickOutside)
 		{
 			deselect();
 		}
 
-		for (size_t i = 0; i < events.size() && isSelected; i++)
+		for (size_t i = 0; i < textEvents.size() && isSelected; i++)
 		{
-			Event& ev = events.at(i);
+			Event& ev = textEvents.at(i);
+			// cout << textEvents.size() << endl;
 			if (checkEventTextEntered(ev))
 			{
-				if ((hasLimit && input.str().length() <= charLimit) || !hasLimit)
+				// cout << ev.text.unicode << endl;
+				if ((hasLimit && input.length() < charLimit) || !hasLimit || ev.text.unicode == DELETE_KEY)
 				{
 					if (inputLogic(ev.text.unicode))
 					{
@@ -174,18 +179,16 @@ public:
 
 		if (align == Align::CENTER)
 		{
-			offset = this->text.getCharacterSize() / OFFRATIO;
-			Vector2f textBoxSize = Vector2f(this->text.getGlobalBounds().width, this->text.getGlobalBounds().height);
-			this->text.setPosition((shape.getSize() / 2.f) - (textBoxSize / 2.f) + (shape.getPosition()) + Vector2f(0, -offset));
+			Vector2f textBoxSize = Vector2f(text.getGlobalBounds().width, text.getGlobalBounds().height);
+			text.setPosition((shape.getSize() / 2.f) - (textBoxSize / 2.f) + shape.getPosition() + Vector2f(offset, -offset));
 		}
 		else if (align == Align::LEFT)
 		{
-			offset = this->text.getCharacterSize() / OFFRATIO;
 			Vector2f textBoxSize = Vector2f(this->text.getGlobalBounds().width, this->text.getGlobalBounds().height);
-			float y_pos = shape.getPosition().y + (shape.getSize().y / 2.f) - offset;
+			float y_pos = shape.getPosition().y + (shape.getSize().y / 2.f) - (textBoxSize.y / 2.f) - offset;
 			this->text.setPosition(Vector2f(shape.getPosition().x + xOffset, y_pos));
 		}
 	}
 
 	void render(RenderWindow& window);
-};
+}; 

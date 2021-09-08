@@ -6,6 +6,7 @@
 #include "Obstacle.h"
 #include "Item.h"
 #include "Button.h"
+#include "Textbox.h"
 
 using namespace sf;
 using namespace std;
@@ -29,6 +30,7 @@ private:
 	Texture donutTexture;
 	Texture shieldTexture;
 	Texture barrierTexture;
+	Texture typingNameTexture;
 	Vector2f deadDirection;
 	Thread deadAnim;
 	Font font;
@@ -39,6 +41,7 @@ private:
 	Clock shieldClock;
 
 	Button returnToMenu;
+	
 
 	vector<Player> player;
 	vector<Obstacle> obs;

@@ -18,7 +18,6 @@ class Button
 {
 private:
 	RectangleShape shape;
-	RectangleShape box;
 	Font* font = NULL;
 	Text text;
 

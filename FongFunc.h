@@ -18,7 +18,7 @@ using namespace sf;
 
 extern float multiplier;
 extern int currentScene;
-extern vector<Event> events;
+extern vector<Event> textEvents;
 
 Vector2f normalize(Vector2f vec);
 

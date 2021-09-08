@@ -19,24 +19,24 @@ Game::Game(RenderWindow* win) :
 	lightingSpawnRate = 60;
 	shieldSpawnRate = 120;
 
-	font.loadFromFile("CourierPrime.ttf");
+	font.loadFromFile("Resources/CourierPrime.ttf");
 	textScore.setFont(font);
 	textScore.setFillColor(Color::Black);
 	textScore.setCharacterSize(30);
 	textScore.setString("Score: " + to_string(score));
 
-	returnToMenu.setup(Vector2f(300, 400), Vector2f(200, 60), &font, "Menu", Color(0, 0, 0, 50), Color(0, 0, 0, 80), Color(0, 0, 0, 120));
+	returnToMenu.setup(Vector2f(150, 400), Vector2f(500, 80), &font, "Menu", Color(0, 0, 0, 50), Color(0, 0, 0, 80), Color(0, 0, 0, 120));
 	returnToMenu.setFontSize(30);
 
-	shieldTexture.loadFromFile("Shield.png");
-	donutTexture.loadFromFile("Donut.png");
-	coinTexture.loadFromFile("Coin.png");
+	shieldTexture.loadFromFile("Resources/Shield.png");
+	donutTexture.loadFromFile("Resources/Donut.png");
+	coinTexture.loadFromFile("Resources/Coin.png");
 
-	playerTexture.loadFromFile("Player.png");
+	playerTexture.loadFromFile("Resources/Player.png");
 	player.push_back(Player(Vector2f(100, 100), Vector2f(400, 400), 4 * 60, &playerTexture, Vector2u(4, 8), 0.2f));
 	player[0].setWindowPtr(window);
 
-	barrierTexture.loadFromFile("Barrier-Sheet.png");
+	barrierTexture.loadFromFile("Resources/Barrier-Sheet.png");
 	player[0].effectShape.setTexture(&barrierTexture);
 	player[0].effectShape.setTextureRect(IntRect(0, 0, 64, 64));
 }

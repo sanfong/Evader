@@ -1,7 +1,5 @@
 #include "Textbox.h"
 
-constexpr int OFFRATIO = 3;
-
 Textbox::Textbox()
 {
 	font = nullptr;

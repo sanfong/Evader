@@ -6,10 +6,10 @@ Menu::Menu(RenderWindow* win, Game* g = nullptr)
 	game = g;
 
 	showScoreBG = false;
-	scoreBGTexture.loadFromFile("scoreBG.jpg");
+	scoreBGTexture.loadFromFile("Resources/scoreBG.jpg");
 	scoreBG.setTexture(scoreBGTexture);
 
-	font.loadFromFile("CourierPrime.ttf");
+	font.loadFromFile("Resources/CourierPrime.ttf");
 
 	start.setup(Vector2f(SCREEN_HALF - 100, 300), Vector2f(200, 60), &font, "Start", Color(0, 0, 0, 50), Color(0, 0, 0, 80), Color(0, 0, 0, 120));
 	scoreBoard.setup(Vector2f(SCREEN_HALF - 100, 400), Vector2f(200, 60), &font, "Scores", Color(0, 0, 0, 50), Color(0, 0, 0, 80), Color(0, 0, 0, 120));
@@ -33,8 +33,6 @@ Menu::Menu(RenderWindow* win, Game* g = nullptr)
 	gameName.setPosition(Vector2f(440, 150) - (textBoxSize / 2.f));
 	gameName.setFillColor(Color(randrange(0, 128), randrange(0, 128), randrange(0, 128)));
 	gameName.setLetterSpacing(0.2f);
-
-
 }
 
 void startGame(int i, Game* game)
