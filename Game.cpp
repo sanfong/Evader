@@ -11,6 +11,8 @@ Game::Game(RenderWindow* win) :
 	deltaTime = 0;
 	spawnRate = 2;
 	currentRate = 0;
+	lightingClock = 0;
+	shieldClock = 0;
 	gameOver = false;
 	shieldOn = false;
 	showEndScore = false;
@@ -56,17 +58,33 @@ Game::Game(RenderWindow* win) :
 
 void saveGoMenu(string str, int score, int scene)
 {
-	cout << str << " " << score << endl;
 	SB::addLeaderBoard(str, score);
 	currentScene = scene;
 }
 
 void Game::update()
 {
-	deltaTime = clock.restart().asSeconds() * multiplier;
+	static bool isPlaying = true;
+	static bool lastESC = false;
+	static bool thisESC = false;
+	thisESC = Keyboard::isKeyPressed(Keyboard::Escape);
+	if (thisESC && !lastESC)
+	{
+		if (!isPlaying)
+		{
+			isPlaying = true;
+		}
+		else
+		{
+			isPlaying = false;
+		}
+	}
+
+	deltaTime = clock.restart().asSeconds() * multiplier * isPlaying;
 	mousePos = (Vector2f)Mouse::getPosition(*window);
 	currentRate += deltaTime;
-	
+	lightingClock += deltaTime;
+	shieldClock += deltaTime;
 	typingName.update(mousePos, saveGoMenu, typingName.getString(), score, 0);
 	
 	// Item spawn
@@ -79,15 +97,15 @@ void Game::update()
 			spawnObs();
 			spawnCoin();
 		}
-		if (lightingClock.getElapsedTime().asSeconds() > lightingSpawnRate)
+		if (lightingClock > lightingSpawnRate)
 		{
-			lightingClock.restart();
+			lightingClock = 0;
 			lightingSpawnRate = randrange(45, 60);
 			spawnDonut();
 		}
-		if (shieldClock.getElapsedTime().asSeconds() > shieldSpawnRate)
+		if (shieldClock > shieldSpawnRate)
 		{
-			shieldClock.restart();
+			shieldClock = 0;
 			shieldSpawnRate = randrange(45, 60);
 			spawnShield();
 		}
@@ -187,6 +205,8 @@ void Game::update()
 		Vector2f textBoxSize = Vector2f(textScore.getGlobalBounds().width, textScore.getGlobalBounds().height);
 		textScore.setPosition(Vector2f(400, 330) - (textBoxSize / 2.f));
 	}
+
+	lastESC = thisESC;
 }
 
 void Game::render()
@@ -261,8 +281,8 @@ void Game::reset()
 	player[0].effectShape.setTextureRect(IntRect(0, 0, 64, 64));
 
 	clock.restart();
-	lightingClock.restart();
-	shieldClock.restart();
+	lightingClock = 0;
+	shieldClock = 0;
 }
 
 void Game::spawnShield()

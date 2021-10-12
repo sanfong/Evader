@@ -36,9 +36,9 @@ private:
 	Font font;
 	Text textScore;
 	float lightingSpawnRate;
-	Clock lightingClock;
+	float lightingClock;
 	float shieldSpawnRate;
-	Clock shieldClock;
+	float shieldClock;
 	RectangleShape whiteAlpha;
 	Text enterYourName;
 	Textbox typingName;

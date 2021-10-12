@@ -119,7 +119,7 @@ public:
 			if (checkEventTextEntered(ev))
 			{
 				// cout << ev.text.unicode << endl;
-				if ((hasLimit && input.length() < charLimit) || !hasLimit || ev.text.unicode == DELETE_KEY)
+				if ((hasLimit && input.length() < charLimit) || !hasLimit || ev.text.unicode == DELETE_KEY || ev.text.unicode == ENTER_KEY)
 				{
 					if (inputLogic(ev.text.unicode))
 					{
@@ -176,7 +176,7 @@ public:
 			if (checkEventTextEntered(ev))
 			{
 				// cout << ev.text.unicode << endl;
-				if ((hasLimit && input.length() < charLimit) || !hasLimit || ev.text.unicode == DELETE_KEY)
+				if ((hasLimit && input.length() < charLimit) || !hasLimit || ev.text.unicode == DELETE_KEY || ev.text.unicode == ENTER_KEY)
 				{
 					if (inputLogic(ev.text.unicode))
 					{

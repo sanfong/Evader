@@ -23,6 +23,10 @@ private:
 
 	Button backToMenu;
 
+	vector<scoreData> scoreDatas;
+	Text nameOnBoard[5];
+	Text scoreOnBoard[5];
+
 public:
 	Menu(RenderWindow* win, Game* g);
 
