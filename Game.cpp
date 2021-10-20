@@ -54,12 +54,22 @@ Game::Game(RenderWindow* win) :
 	typingName.hasLimit = true;
 	typingName.select();
 	typingName.setCharLimit(22);
+
+	backToMenu.setup(Vector2f(SCREEN_HALF - 100, 240), Vector2f(200, 60), &font, "Menu", Color(0, 0, 0, 50), Color(0, 0, 0, 80), Color(0, 0, 0, 120));
 }
 
 void saveGoMenu(string str, int score, int scene)
 {
 	SB::addLeaderBoard(str, score);
 	currentScene = scene;
+}
+
+void directlyGoMenu(Game *game, bool *isPlaying, bool *buttonActive)
+{
+	game->reset();
+	currentScene = 0;
+	*isPlaying = true;
+	*buttonActive = false;
 }
 
 void Game::update()
@@ -73,10 +83,12 @@ void Game::update()
 		if (!isPlaying)
 		{
 			isPlaying = true;
+			backToMenu.isActive = false;
 		}
 		else
 		{
 			isPlaying = false;
+			backToMenu.isActive = true;
 		}
 	}
 
@@ -86,7 +98,8 @@ void Game::update()
 	lightingClock += deltaTime;
 	shieldClock += deltaTime;
 	typingName.update(mousePos, saveGoMenu, typingName.getString(), score, 0);
-	
+	backToMenu.update(mousePos, directlyGoMenu, this, &isPlaying, &backToMenu.isActive);
+
 	// Item spawn
 	if (!gameOver)
 	{
@@ -247,7 +260,7 @@ void Game::render()
 	}
 	window->draw(textScore);
 	typingName.render(*window);
-
+	backToMenu.render(*window);
 }
 
 void Game::reset()

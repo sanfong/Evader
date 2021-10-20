@@ -53,7 +53,6 @@ int main()
 		// Draw scene
 		sceneManager.at(currentScene)->render();
 		window.display();
-
 	}
 	return 0;
 }

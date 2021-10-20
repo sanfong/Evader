@@ -49,6 +49,8 @@ private:
 	vector<Item> donuts;
 	vector<Item> shields;
 
+	Button backToMenu;
+
 public:
 	Game(RenderWindow* win);
 	void update();
