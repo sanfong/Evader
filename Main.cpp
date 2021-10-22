@@ -13,7 +13,7 @@ vector<Event> textEvents = {};
 int main()
 {
 	RenderWindow window(VideoMode(800, 800), "Game", Style::Close);
-	window.setFramerateLimit(60);
+	window.setVerticalSyncEnabled(true);
 	srand(time(static_cast<time_t*>(0)));
 	Game game(&window);
 	Menu menu(&window, &game);
